@@ -1,10 +1,10 @@
 # KalaimagalFin
 
 **Backend:**
-mongo DB with loopback (for API calls)
+mongo DB 
 
 **Frontend:**
 Angular JS/ TypeScript
 
 **Web Service:**
-node.js & loopback
+node.js & loopback (for API calls)
