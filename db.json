@@ -1,0 +1,10 @@
+{
+  "ids": {
+    "Product": 2
+  },
+  "models": {
+    "Product": {
+      "1": "{\"title\":\"Detol\",\"qty\":2,\"price\":3,\"id\":1}"
+    }
+  }
+}
