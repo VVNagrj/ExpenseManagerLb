@@ -76,6 +76,12 @@ export class User extends Entity {
   })
   addressDisplayValue: string;
 
+  @property({
+    type: 'string',
+    required: true,
+  })
+  password: string;
+
 
   constructor(data?: Partial<User>) {
     super(data);
