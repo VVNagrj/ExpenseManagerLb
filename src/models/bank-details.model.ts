@@ -40,6 +40,28 @@ export class BankDetails extends Entity {
   })
   accountBalance: number;
 
+  @property({
+    type: 'boolean',
+    required: true,
+  })
+  isHavingUpi?: boolean;
+
+  @property({
+    type: 'string',
+  })
+  upiId?: string;
+
+  @property({
+    type: 'boolean',
+    required: true,
+  })
+  isHavingCreditCard?: boolean;
+
+  @property({
+    type: 'string',
+  })
+  creditCard?: string;
+
   // Define well-known properties here
 
   // Indexer property to allow additional data

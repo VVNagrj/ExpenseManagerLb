@@ -66,6 +66,12 @@ export class Transaction extends Entity {
   })
   paymentId: number;
 
+  @property({
+    type: 'number',
+    required: true,
+  })
+  expenseId?: number;
+
   // Define well-known properties here
 
   // Indexer property to allow additional data
