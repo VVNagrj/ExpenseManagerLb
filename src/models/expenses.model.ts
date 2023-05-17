@@ -11,6 +11,12 @@ export class Expenses extends Entity {
   id: number;
 
   @property({
+    type: 'string',
+    required: true,
+  })
+  expenses: string;
+
+  @property({
     type: 'date',
     required: true,
   })
