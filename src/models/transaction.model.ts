@@ -11,6 +11,12 @@ export class Transaction extends Entity {
   id: number;
 
   @property({
+    type: 'date',
+    required: true,
+  })
+  date: string;
+
+  @property({
     type: 'number',
     required: true,
   })
@@ -22,17 +28,17 @@ export class Transaction extends Entity {
   })
   operation: string;
 
-  @property({
-    type: 'string',
-    required: true,
-  })
-  operator: string;
+  // @property({
+  //   type: 'string',
+  //   required: true,
+  // })
+  // operator: string;
 
-  @property({
-    type: 'number',
-    required: true,
-  })
-  amount: number;
+  // @property({
+  //   type: 'number',
+  //   required: true,
+  // })
+  // amount: number;
 
   @property({
     type: 'array',
@@ -48,23 +54,23 @@ export class Transaction extends Entity {
   })
   linkedAccountAfter: any[];
 
-  @property({
-    type: 'string',
-    required: true,
-  })
-  paymentType: string;
+  // @property({
+  //   type: 'string',
+  //   required: true,
+  // })
+  // paymentType: string;
 
-  @property({
-    type: 'string',
-    required: true,
-  })
-  paymentMode: string;
+  // @property({
+  //   type: 'string',
+  //   required: true,
+  // })
+  // paymentMode: string;
 
-  @property({
-    type: 'number',
-    required: true,
-  })
-  paymentId: number;
+  // @property({
+  //   type: 'number',
+  //   required: true,
+  // })
+  // paymentId: number;
 
   @property({
     type: 'number',
