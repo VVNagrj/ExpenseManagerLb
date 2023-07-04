@@ -9,6 +9,7 @@ import {
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {MySequence} from './sequence';
+import {BcryptHasher} from './services/hash.password.bcrypt';
 
 export {ApplicationConfig};
 
