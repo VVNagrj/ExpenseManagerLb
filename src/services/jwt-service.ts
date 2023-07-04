@@ -1,16 +1,20 @@
+import {UserProfile} from '@loopback/authentication';
 import {inject} from '@loopback/core';
 import {HttpErrors} from '@loopback/rest';
 import {promisify} from 'util';
+import {TokenServiceBindings} from '../keys';
+
 const jwt = require('jsonwebtoken');
 const signAsync = promisify(jwt.sign);
+const verifyAsync = promisify(jwt.verify);
 
 export class JWTService {
-  @inject('authentication.jwt.secret')
+  @inject(TokenServiceBindings.TOKEN_SECRET)
   public readonly jwtSecret: string;
-  @inject('authentication.jwt.expires.in.seconds')
+  @inject(TokenServiceBindings.TOKEN_EXPIRES_IN)
   public readonly jwtExpiresIn: string;
 
-  async generateToken(userProfile: any): Promise<string> {
+  async generateToken(userProfile: UserProfile): Promise<string> {
     if (!userProfile) {
       throw new HttpErrors.Unauthorized(
         'Error while generating token : userprofile is null',
@@ -25,5 +29,27 @@ export class JWTService {
       throw new HttpErrors.Unauthorized(`error generating token ${err}`);
     }
     return token;
+  }
+  async verifyToken(token: string): Promise<UserProfile> {
+    if (!token) {
+      throw new HttpErrors.Unauthorized(
+        `Error verifying token : 'token' is null`,
+      );
+    }
+    let userProfile: UserProfile;
+    try {
+      // decode user profile from token
+      const decryptedToken = await verifyAsync(token, this.jwtSecret);
+      // don't copy over  token field 'iat' and 'exp', nor 'email' to user profile
+      userProfile = Object.assign(
+        {id: '', name: ''},
+        {id: decryptedToken.id, name: decryptedToken.name},
+      );
+    } catch (error) {
+      throw new HttpErrors.Unauthorized(
+        `Error verifying token : ${error.message}`,
+      );
+    }
+    return userProfile;
   }
 }

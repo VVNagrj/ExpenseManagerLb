@@ -1,7 +1,8 @@
-import {UserService} from '@loopback/authentication';
+import {UserProfile, UserService} from '@loopback/authentication';
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {HttpErrors} from '@loopback/rest';
+import {PasswordHasherBindings} from '../keys';
 import {User} from '../models';
 import {Credentials, UserRepository} from '../repositories/user.repository';
 import {BcryptHasher} from './hash.password.bcrypt';
@@ -10,7 +11,7 @@ export class MyUserService implements UserService<User, Credentials> {
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
-    @inject('service.hasher')
+    @inject(PasswordHasherBindings.PASSWORD_HASHER)
     public hasher: BcryptHasher,
   ) { }
   async verifyCredentials(credentials: Credentials): Promise<User> {
@@ -35,7 +36,7 @@ export class MyUserService implements UserService<User, Credentials> {
     }
     return foundUser;
   }
-  convertToUserProfile(user: User): any {
+  convertToUserProfile(user: User): UserProfile {
     let userName = '';
     if (user.firstName) {
       userName = user.firstName;
@@ -45,6 +46,6 @@ export class MyUserService implements UserService<User, Credentials> {
         ? `${user.firstName} ${user.lastName}`
         : user.lastName;
     }
-    return {id: `${user.id}`, name: userName}
+    return {id: `${user.id}`, name: userName};
   }
 }

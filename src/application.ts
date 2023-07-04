@@ -8,7 +8,13 @@ import {
   RestExplorerComponent,
 } from '@loopback/rest-explorer';
 import {ServiceMixin} from '@loopback/service-proxy';
-import path from 'path';
+import * as path from 'path';
+import {
+  PasswordHasherBindings,
+  TokenServiceBindings,
+  TokenServiceConstants,
+  UserServiceBindings,
+} from './keys';
 import {MySequence} from './sequence';
 import {BcryptHasher} from './services/hash.password.bcrypt';
 import {MyUserService} from './services/user-service';
@@ -48,11 +54,15 @@ export class KalaimagalfinApplication extends BootMixin(
     };
   }
   setupBinding(): void {
-    this.bind('service.hasher').toClass(BcryptHasher);
-    this.bind('rounds').to(10);
-    this.bind('services.user.service').toClass(MyUserService);
+    this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
+    this.bind(PasswordHasherBindings.ROUNDS).to(10);
+    this.bind(UserServiceBindings.USER_SERVICE).toClass(MyUserService);
     this.bind('services.jwt.service').toClass(JWTService);
-    this.bind('authentication.jwt.secret').to('123asdf5');
-    this.bind('authentication.jwt.expires.in.seconds').to('180000');
+    this.bind(TokenServiceBindings.TOKEN_SECRET).to(
+      TokenServiceConstants.TOKEN_SECRET_VALUE,
+    );
+    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to(
+      TokenServiceConstants.TOKEN_EXPIRES_IN_VALUE,
+    );
   }
 }

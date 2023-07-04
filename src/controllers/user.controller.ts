@@ -1,7 +1,16 @@
+import {
+  AuthenticationBindings,
+  UserProfile,
+  authenticate,
+} from '@loopback/authentication';
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
-import {getJsonSchemaRef, post, requestBody} from '@loopback/rest';
+import {get, getJsonSchemaRef, post, requestBody} from '@loopback/rest';
 import * as _ from 'lodash';
+import {
+  PasswordHasherBindings,
+  UserServiceBindings
+} from '../keys';
 import {User} from '../models';
 import {Credentials, UserRepository} from '../repositories';
 import {BcryptHasher} from '../services/hash.password.bcrypt';
@@ -17,9 +26,9 @@ export class UserController {
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
-    @inject('service.hasher')
+    @inject(PasswordHasherBindings.PASSWORD_HASHER)
     public hasher: BcryptHasher,
-    @inject('services.user.service')
+    @inject(UserServiceBindings.USER_SERVICE)
     public userService: MyUserService,
     @inject('services.jwt.service')
     public jwtService: JWTService,
@@ -43,7 +52,6 @@ export class UserController {
     userData.password = await this.hasher.hashPassword(userData.password);
 
     const savedUser = await this.userRepository.create(userData);
-    //delete savedUser.password;
     return savedUser;
   }
 
@@ -74,5 +82,14 @@ export class UserController {
     const userProfile = this.userService.convertToUserProfile(user);
     const token = await this.jwtService.generateToken(userProfile);
     return Promise.resolve({token});
+  }
+
+  @get('/users/me')
+  @authenticate('jwt')
+  async me(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: UserProfile,
+  ): Promise<UserProfile> {
+    return Promise.resolve(currentUser);
   }
 }
