@@ -1,3 +1,4 @@
+import {JWTService} from '@loopback/authentication-jwt';
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
 import {RepositoryMixin} from '@loopback/repository';
@@ -50,5 +51,8 @@ export class KalaimagalfinApplication extends BootMixin(
     this.bind('service.hasher').toClass(BcryptHasher);
     this.bind('rounds').to(10);
     this.bind('services.user.service').toClass(MyUserService);
+    this.bind('services.jwt.service').toClass(JWTService);
+    this.bind('authentication.jwt.secret').to('123asdf5');
+    this.bind('authentication.jwt.expires.in.seconds').to('180000');
   }
 }

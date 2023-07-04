@@ -12,7 +12,6 @@ export class BcryptHasher implements PasswordHasher<string> {
     storedPass: string,
   ): Promise<boolean> {
     const passwordMatched = await compare(providedPass, storedPass);
-    console.log(providedPass, storedPass, passwordMatched)
     return passwordMatched;
   }
   @inject('rounds')

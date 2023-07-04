@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import {User} from '../models';
 import {Credentials, UserRepository} from '../repositories';
 import {BcryptHasher} from '../services/hash.password.bcrypt';
+import {JWTService} from '../services/jwt-service';
 import {MyUserService} from '../services/user-service';
 import {validateCredentials} from '../services/validator';
 
@@ -20,6 +21,8 @@ export class UserController {
     public hasher: BcryptHasher,
     @inject('services.user.service')
     public userService: MyUserService,
+    @inject('services.jwt.service')
+    public jwtService: JWTService,
   ) { }
 
   @post('/users/signup', {
@@ -68,11 +71,8 @@ export class UserController {
   ): Promise<{token: string}> {
     // make sure user exist, password should be valid
     const user = await this.userService.verifyCredentials(credentials);
-    console.log(user);
     const userProfile = this.userService.convertToUserProfile(user);
-    console.log(userProfile);
-
-    //generate a json web token
-    return Promise.resolve({token: '47289374928734asdads'});
+    const token = await this.jwtService.generateToken(userProfile);
+    return Promise.resolve({token});
   }
 }
